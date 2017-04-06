@@ -5,6 +5,10 @@ nTreesRF = 20001
 seed = 100
 percentToKeep = 0.8
 roundDigits = 5
+trainCSV = "train1.csv"
+testCSV = "test1.csv"
+outputFolder = "DRoutput"
+oobCSV = "oob.csv"
 
 # Init
 tStart = Sys.time()
@@ -12,12 +16,13 @@ set.seed(seed)
 library(party)
 library(randomForest)
 library(foreach)
+oobCSV = paste(outputFolder, "//", oobCSV, sep="")
 
 # Load data
 featFileName = paste("f", nInitialFeatures, ".csv", sep="")
 features = as.character(read.csv(featFileName, sep=",", header=FALSE)$V1)
-trainData = read.csv("train1.csv", sep=",", header=TRUE)
-testData = read.csv("test1.csv", sep=",", header=TRUE)
+trainData = read.csv(trainCSV, sep=",", header=TRUE)
+testData = read.csv(testCSV, sep=",", header=TRUE)
 
 trainLabels = trainData$V1
 testLabels = testData$V1
@@ -27,7 +32,7 @@ nTestSubj = nrow(testData)
 # Prepare for DR
 oob = matrix(nrow=0, ncol=7)
 dimnames(oob) = list(NULL, c("nFeatures", "CRF OOB%", "CRF Sens", "CRF Spec", "RF OOB%", "RF Sens", "RF Spec"))
-dir.create("DRoutput", showWarnings=FALSE)
+dir.create(outputFolder, showWarnings=FALSE)
 
 # Do DR
 while(length(curFeatures) > 1) {
@@ -49,12 +54,12 @@ while(length(curFeatures) > 1) {
   specCRF = round(convCRF[2,2] / (convCRF[2,1] + convCRF[2,2]), roundDigits)
   
   oob = rbind(oob, c(length(features), oobCRF, sensCRF, specCRF, oobRF, sensRF, specRF))
-  write.table(oob, "DRoutput//oob.csv", sep=",", row.names=FALSE)
+  write.table(oob, oobCSV, sep=",", row.names=FALSE)
   
   # Get, sort, and write MDAs from CRF model
   MDA = varimp(crf, conditional=TRUE, OOB=TRUE)
   sortedMDA = sort(MDA, decreasing=TRUE)
-  outFileName = paste("DRoutput//f", length(features), ".csv", sep="")
+  outFileName = paste(outputFolder, "//", "f", length(features), ".csv", sep="")
   write.table(sortedMDA, outFileName, sep=",", col.names=FALSE)
   
   # Reduce dimensionality
