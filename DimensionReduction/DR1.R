@@ -21,7 +21,7 @@ library(doParallel)
 # Generate list of features, load data
 features = seq(2, 1 + nGroups*nFeatPerGroup, by=1) # first col is response
 trainData = read.csv(trainCSV, header=TRUE)
-trainLabels <- trainData$V1
+trainLabels = trainData$V1
 featureSets = matrix(sample(features), nrow=nGroups, ncol=nFeatPerGroup)
 
 # Setup parallel backend
