@@ -22,8 +22,8 @@ features = as.character(read.csv(featFileName, header=FALSE)$V1)
 trainLabels = trainData$V1
 testLabels = testData$V1
 
-reducedTrainData = data.frame(trainData[, features])
-reducedTestData = data.frame(testData[, features])
+reducedTrainData = data.frame(trainData[, features], trainLabels)
+reducedTestData = data.frame(testData[, features], testLabels)
 
 rf = randomForest(trainLabels~., data=reducedTrainData)
 table(testLabels, predict(rf, newdata=reducedTestData, OOB=TRUE))

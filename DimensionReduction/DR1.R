@@ -31,7 +31,7 @@ registerDoParallel(clust)
 foreach(i = 1:nGroups) %dopar% {
   library(party)
   set.seed(seed)
-  reducedTrainData = data.frame(trainData[, featureSets[i,]])
+  reducedTrainData = data.frame(trainData[, featureSets[i,]], trainLabels)
 	
 	crf = cforest(trainLabels~., data=reducedTrainData, controls=cforest_unbiased(ntree=nTrees))
 	mda = varimp(crf, conditional=TRUE, OOB=TRUE)

@@ -56,7 +56,7 @@ foreach(i=1:nIterations) %dopar% {
   indexesAnat = sample(skipColsAnat + (1:nAnat), nFeaturesPerModality, replace=FALSE)
   dataAnat = allAnat[, indexesAnat]
 
-  sampledData = data.frame(dataFC, dataDTI, dataAnat)
+  sampledData = data.frame(dataFC, dataDTI, dataAnat, labels)
 
   crf = cforest(labels~., data=sampledData, controls=cforest_unbiased(ntree = ntree))
   conv = table(labels, predict(crf, OOB=TRUE))

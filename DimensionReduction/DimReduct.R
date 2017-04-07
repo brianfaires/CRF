@@ -36,7 +36,7 @@ dir.create(outputFolder, showWarnings=FALSE)
 
 # Do DR
 while(length(curFeatures) > 1) {
-  reducedTrainData = data.frame(trainData[,features])
+  reducedTrainData = data.frame(trainData[,features], trainLabels)
   crf = cforest(trainLabels~., data=reducedTrainData, controls=cforest_unbiased(ntree=nTreesCRF))
   convCRF = table(trainLabels, predict(crf, OOB=TRUE))
   

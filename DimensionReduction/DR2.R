@@ -31,7 +31,7 @@ clust<-makeCluster(nProcessors, outfile="")
 registerDoParallel(clust)
 
 foreach(i = 1:nGroups) %dopar% {
-	reducedTrainData = data.frame(trainData[, featureSets[i,]])
+	reducedTrainData = data.frame(trainData[, featureSets[i,]], trainLabels)
 	library(party)
 	set.seed(seed)
   
