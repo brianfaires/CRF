@@ -1,7 +1,7 @@
 # Parses output of DR#.R, extracts features and MDAs, sorts them and writes them
 
 # Config
-inputFileName = "DR6.o4254"
+inputFileName = "DR2.set3.o4341"
 outputFileName = paste(inputFileName, ".MDAs.csv", sep="")
 
 # Load input file
@@ -27,9 +27,12 @@ for(i in 1:nLines) {
 
 # Remove empty strings that show up from uneven lines
 names = names[names != ""]
-values = values[values != ""]
+values = as.numeric(values[values != ""])
+
+names = names[values >= 0]
+values = values[values >= 0]
 
 # Sort and write data
 output = data.frame(names, values)
-output[order(output$values, decreasing=TRUE), ]
-write.table(output, outputFileName, sep=",", row.names=FALSE, col.names=FALSE)
+sortedOutput = output[order(output$values, decreasing=TRUE), ]
+write.table(sortedOutput, outputFileName, sep=",", row.names=FALSE, col.names=FALSE)
