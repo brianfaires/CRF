@@ -2,7 +2,6 @@
 
 # Config
 inputFileName = "DR2.set3.o4341"
-outputFileName = paste(inputFileName, ".MDAs.csv", sep="")
 
 # Load input file
 allLines = readLines(inputFileName)
@@ -35,4 +34,6 @@ values = values[values >= 0]
 # Sort and write data
 output = data.frame(names, values)
 sortedOutput = output[order(output$values, decreasing=TRUE), ]
+
+outputFileName = paste("f", nrow(sortedOutput), ".csv", sep="")
 write.table(sortedOutput, outputFileName, sep=",", row.names=FALSE, col.names=FALSE)
