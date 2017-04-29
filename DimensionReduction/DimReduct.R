@@ -37,11 +37,13 @@ dir.create(outputFolder, showWarnings=FALSE)
 # Do DR
 while(length(curFeatures) > 1) {
   reducedTrainData = data.frame(trainData[,features], trainLabels)
+  reducedTestData = data.frame(testData[,features], testLabels)
+
   crf = cforest(trainLabels~., data=reducedTrainData, controls=cforest_unbiased(ntree=nTreesCRF))
   convCRF = table(trainLabels, predict(crf, OOB=TRUE))
   
   # Create an RF model for testing data
-  rf = randomforest(trainLabels~., data=reducedTrainData, ntree=nTreesRF)
+  rf = randomForest(trainLabels~., data=reducedTrainData, ntree=nTreesRF)
   convRF = table(testLabels, predict(rf, newdata=reducedTestData))
   
   # Log and write OOB/Sens/Spec
